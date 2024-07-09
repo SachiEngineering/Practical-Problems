@@ -90,9 +90,11 @@ def generate_email_addresses(names, domain):
         fullName = person[0] + person[1]
         if fullName not in numSeen:
             email = person[0] + "." + person[1] + "@" + domain
+            email = email.lower()
             numSeen[fullName] = 1
         else:
             email = person[0] + "." + person[1] + str(numSeen[fullName]) + "@" + domain
+            email = email.lower()
             numSeen[fullName] += 1
 
         output.append(email)
