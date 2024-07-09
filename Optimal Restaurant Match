@@ -1,0 +1,123 @@
+
+'''
+❓ PROMPT
+Ned and Mary want to choose a restaurant to bring their kids to for the evening, and they both have a list of their favorite places, represented by strings and sorted by preference. The place they each prefer the most is at the beginning of the list, and their least preferred at the end.
+
+You need to help them find the optimal match to dine at based on their combined preferences score. They will often have to compromise, so their ideal option is a place they both have on their list, and it has the highest combined preference score.
+
+To calculate the highest combined preference score, get the restaurant with the minimum index sum when adding the indices of the restaurant on both of their lists together. If multiple restaurants have the same highest score, output all of them.
+
+Example(s)
+Input:
+nedsChoices = ["Shogun", "Tapioca Express", "Burger King", "KFC"]
+marysChoices = ["Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"]
+Output: ["Shogun"]
+Explanation: The only restaurant they both like is "Shogun".
+
+Input:
+nedsChoices = ["Shogun", "Tapioca Express", "Burger King", "KFC"]
+marysChoices = ["KFC", "Shogun", "Burger King"]
+Output: ["Shogun"]
+Explanation: They both have "Shogun" on their preferred list and it has the highest preference score with an index sum of 1 (0+1). They both listed "KFC" but it has a lower preference score because the index sum is 3 (0+3). Likewise, "Burger King" has a preference score of 4 (2+2).
+
+Input:
+nedsChoices = ["Guppy House", "In-n-Out", "Dairy Queen"]
+marysChoices = ["In-n-Out", "Guppy House", "Dairy Queen"]
+Output: ["Guppy House", "In-n-Out"]
+Explanation: They both have "Guppy House" and "In-n-Out" on their preferred list and both restaurants have the same highest total preference score with an index sum of 1 (0+1 and 1+0). They both listed "Dairy Queen" but the preference score is 4 (2+2).
+ 
+
+🔎 EXPLORE
+List your assumptions & discoveries:
+Q: Will there always be at least one restaurant?
+A: yes
+
+Q: Can the lists have no overlapping restaurants?
+A: No, there will always be at least one restaurant that both people prefer. They will be guaranteed to dine out.
+
+Q: Should this be case-sensitive?
+A: For simplicity, yes. Different capitalizations or symbols will be a different restaurant.
+
+Insightful & revealing test cases:
+ 
+
+🧠 BRAINSTORM
+Time: O(N + M) to iterate through both Ned's and Mary's list independently
+Space: O(N + M) to store up to Ned's list and Mary's list distinct elements
+ 
+
+📆 PLAN
+Outline of algorithm #: 
+
+for rest in mary's choices with index avail
+    if rest in ned's choices:
+        dict: key: rest, value: index addition
+
+get minimum index addition
+
+append all with minimum index addition to winning resturant array
+
+return winner
+
+ 
+'''
+#🛠️ IMPLEMENT
+
+def findCompatibleRestaurants(ned: list[str], mary: list[str]) -> list[str]:
+
+    overlap = {}
+    winner = []
+    for i in range(len(mary)):
+        if mary[i] in ned:
+            overlap[mary[i]] = i + ned.index(mary[i])
+
+    minIndex = min(overlap.values())
+
+    for key, value in overlap.items():
+        if value == minIndex:
+            winner.append(key)
+
+    return winner
+
+
+# 🧪 VERIFY
+# Run tests. Methodically debug & analyze issues.
+nedsChoices = ["Shogun", "Tapioca Express", "Burger King", "KFC"]
+marysChoices = ["Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Shogun"])
+
+nedsChoices = ["Shogun", "Tapioca Express", "Burger King", "KFC"]
+marysChoices = ["KFC", "Shogun", "Burger King"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Shogun"])
+
+nedsChoices = ["Guppy House", "In-n-Out", "Dairy Queen"]
+marysChoices = ["In-n-Out", "Guppy House", "Dairy Queen"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices).sort()
+== ["Guppy House", "In-n-Out"].sort())
+
+nedsChoices = ["Olive Garden", "Outback Steakhouse", "Red Lobster"]
+marysChoices = ["Olive Garden", "Outback Steakhouse", "Red Lobster"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Olive Garden"])
+
+nedsChoices = ["Hometown Buffet", "Olive Garden", "Red Lobster"]
+marysChoices = ["Panda Express", "Denny's", "Red Lobster"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Red Lobster"])
+
+nedsChoices = ["Costco Food Court"]
+marysChoices = ["Costco Food Court"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Costco Food Court"])
+
+nedsChoices = ["Costco Food Court", "Saigon Deli", "Med Mix"]
+marysChoices = ["Med Mix", "Saigon Deli", "Costco Food Court"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices).sort()
+== ["Saigon Deli", "Costco Food Court", "Med Mix"].sort())
+
+nedsChoices = ["Costco Food Court"]
+marysChoices = ["Med Mix", "Saigon Deli", "Costco Food Court"]
+print(findCompatibleRestaurants(nedsChoices, marysChoices)
+== ["Costco Food Court"])
