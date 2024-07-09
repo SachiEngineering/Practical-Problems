@@ -1,0 +1,118 @@
+
+'''
+❓ PROMPT
+You and your friends are founding a startup and just reserved a domain name! As part of getting your company going, you need to set up everyone with a company email account. To make this a little faster, you want to write some code to generate the email addresses given their first and last names, as well as your new domain name.
+
+The names are provided as an array of first and last name pairs:
+
+[
+  ["Joe", "Smith"],
+  ["Yuki", "Yamamoto"],
+]
+
+The domain name is just a string, like "mystartup.com".
+
+You MUST generate an email address for each person. Each email must be unique. We're not going to specify how the email addresses should be formed from the names. There are many schemes one could use. Think about what you would want your email address to be.
+
+The output should be an array of email addresses, where for each index, i, in the input, the corresponding entry in the output array has that person's generated email address.
+
+Remember, email addresses are case-insensitive, so the output should be all lower case. For simplicity, to the left of the '@' symbol, an email address may contain lower case letters, numbers, period and underscore. 
+
+Example(s)
+For names [
+  ["Joe", "Smith"],
+  ["Yuki", "Yamamoto"],
+]
+and domain "mystartup.com"
+
+one possible output could be:
+
+[
+  "joe.smith@mystartup.com",
+  "yuki.yamamoto@mystartup.com"
+]
+
+or
+
+[
+  "jsmith@mystartup.com",
+  "yyamamoto@mystartup.com"
+]
+
+ 
+
+🔎 EXPLORE
+List your assumptions & discoveries:
+Q:Will we always get a first and last name?
+A: Y
+
+Q: Will people have the same names?
+A: Y
+
+Q: Will the domain name be correctly formatted?
+A: Y
+
+Insightful & revealing test cases:
+ 
+
+🧠 BRAINSTORM
+What approaches could work?
+Algorithm 1:
+Time: O(n)
+Space: O(n)
+ 
+
+📆 PLAN
+Outline of algorithm #: 
+make output arr
+dict for names. key : name, value = freq
+for each person:
+    if name has not been seen before:
+        concat first name + . + last name + @ + domain
+        lower()
+        append to output arr
+        add to dict
+    if name has been seen before
+        concat first name + . + last name + numSeen + @ + domain
+        lower()
+        append to output arr
+        increase freq in dict
+ 
+return output arr
+'''
+#🛠️ IMPLEMENT
+def generate_email_addresses(names, domain):
+
+    output = []
+    numSeen = {}
+
+    for person in names:
+        fullName = person[0] + person[1]
+        if fullName not in numSeen:
+            email = person[0] + "." + person[1] + "@" + domain
+            numSeen[fullName] = 1
+        else:
+            email = person[0] + "." + person[1] + str(numSeen[fullName]) + "@" + domain
+            numSeen[fullName] += 1
+
+        output.append(email)
+
+    return output
+
+# 🧪 VERIFY
+# Run tests. Methodically debug & analyze issues.
+print(generate_email_addresses([
+  ["Joe", "Smith"],
+  ["Yuki", "Yamamoto"],
+], "mystartup.com"
+))
+
+print(generate_email_addresses([
+  ["Yuki", "Yamamoto"],
+  ["Yuki", "Yamamoto"],
+  ["Yuki", "Yamamoto"],
+  ["Yuki", "Yamamoto"],
+  ["Yuki", "Yamamoto"],
+  ["Yuki", "Yamamoto"],
+], "mystartup.com"
+))
