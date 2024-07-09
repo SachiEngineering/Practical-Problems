@@ -1,0 +1,87 @@
+
+'''
+Count Circular Primes
+
+Find the number of circular primes less than or equal to upper bound.
+
+The number 197 is called a circular prime because all rotations of the digits:
+197, 971, and 719 are themselves prime.
+
+There are 13 circular primes between 2 and 100:
+2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, 97
+ 
+
+EXAMPLE(S)
+countCircularPrimes(100) == 13
+ 
+
+FUNCTION SIGNATURE
+function countCircularPrimes(upperBound) {
+def countCircularPrimes(upperBound: int) -> int:
+'''
+
+'''
+given a number (num), find all the prime numbers from 2 to the num
+
+if the prime num numbers rotated creates a prime number, in all rotations
+
+
+create a method to check if a number is prime 
+Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+Initially, let p equal 2, the smallest prime number.
+Enumerate the multiples of p by counting in increments of p from 2p to n, and mark them in the list (these will be 2p, 3p, 4p, ...; the p itself should not be marked).
+Find the smallest number in the list greater than p that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
+When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
+
+'''
+def rotate(num):
+    num_string = str(num)
+    result = []
+    for i in range(len(num_string)):
+        temp = num_string[i:] + num_string[:i]
+        result.append(int(temp))
+
+    return result
+
+
+def countCircularPrimes(upperBound: int) -> int:
+
+    primeList = [True] * (upperBound+1)
+    primeList[0] = primeList[1] = False
+
+    p = 2
+    while pow(p, 2) <= upperBound:
+        if primeList[p]: # if prime
+            for i in range(p*p, upperBound+1,p): #multiples of p
+                primeList[i] = False
+        p+=1
+
+    allPrimes = [] # put all primes in one list
+    for i,prime in enumerate(primeList):
+        if prime:
+            allPrimes.append(i)
+
+    result = set()
+    #check each prime, generate rotations, check if all rotations are prime, add to results
+        
+    for prime in allPrimes:
+        if prime not in result:
+            rotations = rotate(prime)
+            check = True
+            for rotation in rotations:                 
+                if rotation not in allPrimes:
+                    check = False
+            if check:
+                result.add(prime)
+
+    return (len(result))
+                    
+
+
+print(countCircularPrimes(10)==4)
+print(countCircularPrimes(100)==13)
+print(countCircularPrimes(1) == 0)
+print(countCircularPrimes(2) == 1)
+print(countCircularPrimes(100) == 13)
+print(countCircularPrimes(1000) == 25)
+print(countCircularPrimes(10000) == 33)
