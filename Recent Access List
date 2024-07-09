@@ -1,0 +1,51 @@
+'''
+Design a structure to efficiently manage a data set in order of access. The most recently accessed data is always at the end. The data least recently accessed is at the beginning.
+
+This data structure should be implemented as a class. The constructor takes the data in the form of an array and initializes the instance.
+
+This class must also support a fetch method that takes an ordinal (one based index) and returns the data at that position, but it also moves it to the end, due to it being accessed. For example, if the data is initially [5, 7, 3], and we access the 1st value, 5 is returned and afterward the data will be [7, 3, 5]. If then we access the 3rd value, the 5 is again returned but the order is unchanged since the 5 was already at the end.
+ 
+
+EXAMPLE(S)
+const q = new MRQueue([5, 7, 3]);
+console.log(q.fetch(1)); // returns 5
+console.log(q.fetch(1)); // returns 7
+console.log(q.fetch(3)); // returns 7
+'''
+
+class MRQueue:
+    def __init__(self, data):
+        self.data = data
+
+    def fetch(self, ordinal):
+        # Convert 1-based index to 0-based index
+        index = ordinal - 1
+        
+        # Validate the index
+        if index < 0 or index >= len(self.data):
+            return None
+        
+        # Fetch the element
+        element = self.data[index]
+        
+        # Move the accessed element to the end if it is not already there
+        # Check if the accessed element is not already the last element in the list
+        if index != len(self.data) - 1:
+            # Remove the element from its current position
+            self.data.pop(index)
+            # Append the element to the end of the list
+            self.data.append(element)
+        
+        # Return the fetched element
+        return element
+
+# Example usage:
+queue = MRQueue([5, 7, 3])
+print(queue.fetch(1))  # Output: 5
+print(queue.data)      # Output: [7, 3, 5]
+
+print(queue.fetch(3))  # Output: 5
+print(queue.data)      # Output: [7, 3, 5]
+
+print(queue.fetch(5))  # Output: None
+print(queue.data)      # Output: [5,7,3]
