@@ -1,0 +1,36 @@
+# Convert a non-negative integer to it's equivalent representation as words in English.
+
+def solution(num):
+    result = ""
+    if num == 0:
+        return "Zero"
+    
+    below_20 = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+                "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", 
+                "Eighteen", "Nineteen"]
+    tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+    other = ["", "Thousand", "Million", "Billion"]
+    
+    def converter(n):
+        if n == 0:
+            return ""
+        elif n < 20:
+            return below_20[n] + " "
+        elif n < 100:
+            return tens[n // 10] + " " + converter(n % 10)
+        else:
+            return below_20[n // 100] + " Hundred " + converter(n % 100)
+    
+    for element in other:
+        if num % 1000 != 0:
+            result = converter(num % 1000) + " " + element + " " + result
+        num = num//1000
+    
+    result = " ".join(result.strip().split())
+    return result
+
+
+print(solution(1))          # Output: "One"
+print(solution(123))        # Output: "One Hundred Twenty Three"
+print(solution(12345))      # Output: "Twelve Thousand Three Hundred Forty Five"
+print(solution(1234567))    # Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
